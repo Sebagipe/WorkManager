@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.daggerHilt)
+    id("kotlin-kapt")
 }
 
 android {
@@ -58,5 +60,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     // Work Manager
     implementation(libs.androidx.work.runtime.ktx)
+
+    //Dagger Hilt
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.dagger.hilt)
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.dagger.hilt.androidx)
+    implementation(libs.dagger.hilt.navigation.compose)
 
 }

@@ -1,15 +1,23 @@
 package com.example.workmanager.workers
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.workmanager.DataRepository
+import com.example.workmanager.DataSyncRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class DataSyncWorker (val appContext : Context, workerParams : WorkerParameters, private val dataRepository : DataRepository) :
+@HiltWorker
+class DataSyncWorker @AssistedInject constructor
+    (@Assisted appContext : Context,
+     @Assisted workerParams : WorkerParameters,
+     private val dataSyncRepository : DataSyncRepository) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
         try {
-            dataRepository.syncData()
+            dataSyncRepository.checkIfUpToDate()
+            dataSyncRepository.syncData()
             return Result.success()
         } catch (e : Exception){
             return Result.failure()

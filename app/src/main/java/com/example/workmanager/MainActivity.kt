@@ -21,13 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.work.WorkManager
 import com.example.workmanager.ui.theme.WorkManagerTheme
 import com.example.workmanager.viewModels.DataViewModel
-
-lateinit var workManager: WorkManager
-
-
 
 class MainActivity : ComponentActivity() {
     lateinit var repository: DataSyncRepository
@@ -35,13 +30,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        workManager = WorkManager.getInstance(applicationContext)
         enableEdgeToEdge()
         setContent {
             WorkManagerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        Button(onClick = { viewModel.initDataSync(workManager) }) {
+                        Button(onClick = { viewModel.initDataSync() }) {
                             Text("Sync Data")
                         }
                         Row {
@@ -51,10 +45,10 @@ class MainActivity : ComponentActivity() {
                                 onCheckedChange = {
                                     if (checked == false) {
                                         checked = true
-                                        viewModel.initPeriodicDataSync(workManager)
+                                        viewModel.initPeriodicDataSync()
                                     } else {
                                         checked = false
-                                        workManager.cancelUniqueWork("PERIODIC_DATA_SYNC")
+                                        viewModel.cancelPeridocDataSync()
                                     }
                                 }
                             )

@@ -8,20 +8,10 @@ import com.example.workmanager.DataSyncRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
-class DataSyncWorker
-    (appContext : Context,
-     workerParams : WorkerParameters ) :
-    Worker(appContext, workerParams) {
-
-    private val dataSyncRepository = DataSyncRepository(appContext)
-
-    override fun doWork(): Result {
-        try {
-            dataSyncRepository.checkIfUpToDate()
-            dataSyncRepository.syncData()
-            return Result.success()
-        } catch (e : Exception){
-            return Result.failure()
-        }
-    }
-}
+//TODO: Worker Klasse definieren (Siehe Vorlesungsfolien)
+//      - In der Worker Klasse soll die DataSyncRepository instantiiert werden.
+//        Die Repository repräsentiert eine Schnittstelle zu einen Dienst der die
+//        Datensynchronisierung verwaltet (z.B mit Cloud Anbindung)
+//      - Bei jeden Arbeitsauftrag soll überprüft werden ob die Daten aktuell sind.
+//        Wenn nicht sollen die aktualisiert werden.
+class DataSyncWorker{}

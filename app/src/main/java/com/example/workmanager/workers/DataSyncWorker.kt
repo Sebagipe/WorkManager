@@ -8,12 +8,13 @@ import com.example.workmanager.DataSyncRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
-@HiltWorker
-class DataSyncWorker @AssistedInject constructor
-    (@Assisted appContext : Context,
-     @Assisted workerParams : WorkerParameters,
-     private val dataSyncRepository : DataSyncRepository) :
+class DataSyncWorker
+    (appContext : Context,
+     workerParams : WorkerParameters ) :
     Worker(appContext, workerParams) {
+
+    private val dataSyncRepository = DataSyncRepository(appContext)
+
     override fun doWork(): Result {
         try {
             dataSyncRepository.checkIfUpToDate()

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,27 +21,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.workmanager.ui.theme.WorkManagerTheme
-import com.example.workmanager.workers.DataSyncWorker
-import dagger.hilt.android.AndroidEntryPoint
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+import com.example.workmanager.viewModels.DataViewModel
 
 lateinit var workManager: WorkManager
 
 
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
     lateinit var repository: DataSyncRepository
+    private val viewModel : DataViewModel  by viewModels<DataViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +41,7 @@ class MainActivity : ComponentActivity() {
             WorkManagerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        val isUpToDate by remember { repository.isUpToDate }
-                        Text(isUpToDate.toString())
-                        Button(onClick = { initDataSync() }) {
+                        Button(onClick = { viewModel.initDataSync(workManager) }) {
                             Text("Sync Data")
                         }
                         Row {
@@ -62,7 +51,7 @@ class MainActivity : ComponentActivity() {
                                 onCheckedChange = {
                                     if (checked == false) {
                                         checked = true
-                                        initPeriodicDataSync()
+                                        viewModel.initPeriodicDataSync(workManager)
                                     } else {
                                         checked = false
                                         workManager.cancelUniqueWork("PERIODIC_DATA_SYNC")
@@ -71,7 +60,7 @@ class MainActivity : ComponentActivity() {
                             )
                             Spacer(Modifier.padding(5.dp))
                             Text(
-                                "Sync data every minute",
+                                "Sync data every 15 seconds",
                                 Modifier.align(Alignment.CenterVertically)
                             )
                         }
@@ -82,28 +71,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-fun initDataSync (){
-    val constraints = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .setRequiresStorageNotLow(true)
-        .build()
-
-    val syncRequest = OneTimeWorkRequestBuilder<DataSyncWorker>()
-        .setConstraints(constraints)
-        .build()
-
-    workManager.enqueueUniqueWork("Data_Sync", ExistingWorkPolicy.KEEP, syncRequest)
-}
-fun initPeriodicDataSync (){
-    val constraints = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .setRequiresStorageNotLow(true)
-        .build()
-
-    val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(1,TimeUnit.MINUTES)
-        .setConstraints(constraints)
-        .build()
-
-    workManager.enqueueUniquePeriodicWork("PERIODIC_DATA_SYNC", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
-}

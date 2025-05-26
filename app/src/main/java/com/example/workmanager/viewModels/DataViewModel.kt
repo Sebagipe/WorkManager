@@ -1,5 +1,7 @@
 package com.example.workmanager.viewModels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -11,8 +13,12 @@ import androidx.work.WorkManager
 import com.example.workmanager.workers.DataSyncWorker
 import java.util.concurrent.TimeUnit
 
-class DataViewModel : ViewModel(){
-    fun initDataSync (workManager: WorkManager){
+class DataViewModel (app : Application) : AndroidViewModel(app) {
+
+    private val workManager = WorkManager.getInstance(app.applicationContext)
+    private val PERIODIC_DATA_SYNC_WORK_NAME = "PERIODIC_DATA_SYNC"
+
+    fun initDataSync (){
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresStorageNotLow(true)
@@ -24,7 +30,7 @@ class DataViewModel : ViewModel(){
 
         workManager.enqueueUniqueWork("Data_Sync", ExistingWorkPolicy.KEEP, syncRequest)
     }
-    fun initPeriodicDataSync (workManager: WorkManager){
+    fun initPeriodicDataSync (){
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresStorageNotLow(true)
@@ -35,5 +41,8 @@ class DataViewModel : ViewModel(){
             .build()
 
         workManager.enqueueUniquePeriodicWork("PERIODIC_DATA_SYNC", ExistingPeriodicWorkPolicy.KEEP, syncRequest)
+    }
+    fun cancelPeridocDataSync(){
+        workManager.cancelUniqueWork(PERIODIC_DATA_SYNC_WORK_NAME)
     }
 }

@@ -17,7 +17,6 @@ class DataSyncWorker
 
     override fun doWork(): Result {
         try {
-            dataSyncRepository.checkIfUpToDate()
             dataSyncRepository.syncData()
             return Result.success()
         } catch (e : Exception){

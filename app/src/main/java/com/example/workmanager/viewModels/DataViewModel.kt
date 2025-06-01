@@ -11,7 +11,7 @@ class DataViewModel (app : Application) : AndroidViewModel(app) {
 
     fun initDataSync() {
         //TODO: Verwende den Workmanager um einen Arbeitsauftrag in die Warteschlange zu stellen
-        // - Wenn möglich soll die Arbeit unverzögert durchgeführt werden
+        // - Wenn möglich soll die Arbeit unverzögert (Immediate/Expedided) durchgeführt werden
         // - Dabei sollen folgende Contraints eingehalten werden:
         //      - Internetverbindung muss vorhanden sein
         //      - Speicherplatz darf nicht niedrig sein
@@ -25,7 +25,7 @@ class DataViewModel (app : Application) : AndroidViewModel(app) {
         //      - Internetverbindung muss vorhanden sein
         //      - Speicherplatz darf nicht niedrig sein
         // - Der Arbeitsauftrag soll als Unique in die Warteschlagen gestellt werden und soll
-        //   den Namen "PERIODIC_DATA_SYNC" (Siehe variebel Oben)  bekommen.
+        //   den Namen "PERIODIC_DATA_SYNC"  bekommen.
         //   (Für die Workpolicy, einfach das nehmen: ExistingPeriodicWorkPolicy.KEEP)
     }
 

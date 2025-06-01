@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         }
                         Row {
                             //TODO:
-                            // Verwende den viewModel, um eine periodische  Datensynchronisierung an- und aus-schalten zu können.
+                            // Verwende den viewModel, um eine periodische Datensynchronisierung mit den folgenden Switch an- und aus-schalten zu können.
                             var checked by remember { mutableStateOf(false) }
                             Switch(
                                 checked = checked,

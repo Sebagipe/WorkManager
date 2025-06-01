@@ -9,11 +9,19 @@ class DataSyncRepository (applicationContext : Context) {
         checkIfUpToDate()
         if (isUpToDate.value == false) {
             Thread.sleep(3000)
+
+
             // Tatsächtliche Datensynchronisierung
+            // ...
+            // ...
+
+
             isUpToDate.value = true
         }
     }
     fun checkIfUpToDate(){
         // Code zur Überprüfung
+        // ..
+        //...
     }
 }

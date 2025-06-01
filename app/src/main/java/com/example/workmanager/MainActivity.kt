@@ -35,20 +35,22 @@ class MainActivity : ComponentActivity() {
             WorkManagerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        Button(onClick = { viewModel.initDataSync() }) {
+                    //TODO:
+                    // Verwende den viewModel, um eine Datensynchronisierung in der Warteschlange zu setzen
+                        Button(onClick = { }) {
                             Text("Sync Data")
                         }
                         Row {
+                            //TODO:
+                            // Verwende den viewModel, um eine periodische  Datensynchronisierung an- und aus-schalten zu können.
                             var checked by remember { mutableStateOf(false) }
                             Switch(
                                 checked = checked,
                                 onCheckedChange = {
                                     if (checked == false) {
                                         checked = true
-                                        viewModel.initPeriodicDataSync()
                                     } else {
                                         checked = false
-                                        viewModel.cancelPeridocDataSync()
                                     }
                                 }
                             )

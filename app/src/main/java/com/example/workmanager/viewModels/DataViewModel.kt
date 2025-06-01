@@ -8,6 +8,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.workmanager.workers.DataSyncWorker
@@ -26,6 +27,7 @@ class DataViewModel (app : Application) : AndroidViewModel(app) {
 
         val syncRequest = OneTimeWorkRequestBuilder<DataSyncWorker>()
             .setConstraints(constraints)
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .build()
 
         workManager.enqueueUniqueWork("Data_Sync", ExistingWorkPolicy.KEEP, syncRequest)
@@ -36,7 +38,7 @@ class DataViewModel (app : Application) : AndroidViewModel(app) {
             .setRequiresStorageNotLow(true)
             .build()
 
-        val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(15,TimeUnit.SECONDS)
+        val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(15,TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 

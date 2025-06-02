@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
                     //TODO:
-                    // Verwende den viewModel, um eine Datensynchronisierung in der Warteschlange zu setzen
+                    // Verwende den viewModel, um eine Datensynchronisierung in der Warteschlange zu setzen, wenn der folgender Knopf gedruckt wird
                         Button(onClick = { }) {
                             Text("Sync Data")
                         }
